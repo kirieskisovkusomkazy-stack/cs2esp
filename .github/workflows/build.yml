@@ -1,0 +1,21 @@
+name: Build ESP
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build
+        shell: cmd
+        run: |
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          cl /std:c++17 /O2 /EHsc /W0 esp.cpp /link psapi.lib gdi32.lib user32.lib /OUT:esp.exe
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: esp
+          path: esp.exe
